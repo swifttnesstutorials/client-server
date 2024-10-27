@@ -31,11 +31,12 @@ app.use('/payments', paymentRoutes);
 async function main() {
     try {
         await mongoose.connect('mongodb+srv://aryanandhaaryanandha5:4Bh1827PvvzBJv2V@cluster0.rwrcn.mongodb.net/', {
-           
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         });
         console.log("Connected to MongoDB successfully");
         
-        app.listen(port, () => {
+        app.listen(port, '0.0.0.0', () => {
             console.log(`Example app listening on port ${port}`);
         });
     } catch (err) {
