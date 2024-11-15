@@ -1,5 +1,4 @@
-
-const Admin=require('../models/adminModel.js')
+const Admin=require('../models/adminModel')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -22,12 +21,8 @@ const getAllAdmin=async(req, res) => {
     
     await admin.save();
     
-    const token = jwt.sign({ _id: admin._id, role: admin.role },'61b19ed193347d3a3c2b056ca3cf0af8639cea06a78ab8cb8c03a66f81c725634de8db004b5404e2f2418eae68f34b8ab1b1763a4a0cc2dcfd8a9a0dfc163719');
-    res.cookie("token", token,{
-      sameSite:"None",
-      secure: true,
-      httpOnly:true,
-    });
+    const token = jwt.sign({ _id: admin._id, role: admin.role },  '61b19ed193347d3a3c2b056ca3cf0af8639cea06a78ab8cb8c03a66f81c725634de8db004b5404e2f2418eae68f34b8ab1b1763a4a0cc2dcfd8a9a0dfc163719');
+    
     // Return both token and role in response
     res.json({ success: true, message: "admin created successfully", token, role: admin.role });
   };

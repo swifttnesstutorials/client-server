@@ -1,16 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { verifyToken } = require('../middlewares/authMiddlewares.js');
-const { getAllUser, getUserById, userSignup, updateUser, deleteUser } = require('../controllers/userControllers.js');
+const { verifyToken } = require('../middlewares/authMiddlewares');
+const { getUserProfile, userSignup, userLogin, updateUser, deleteUser } = require('../controllers/usercontrollers');
 
-router.get('/',  getAllUser);
+router.post('/signup', userSignup);
+router.post('/login', userLogin);
 
-router.get('/:userId',verifyToken,  getUserById);
+// Profile route for authenticated users
+router.get('/profile', verifyToken, getUserProfile); // New profile route
 
-router.post('/user', userSignup);
-
-router.patch('/:userId', verifyToken, updateUser);  // Fixed this line
-
-router.delete('/:userId',  deleteUser);
+router.patch('/:userId', verifyToken, updateUser);
+router.delete('/:userId', verifyToken, deleteUser);
 
 module.exports = router;

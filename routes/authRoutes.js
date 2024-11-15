@@ -5,7 +5,7 @@ const { userLogin, adminLogin, userLogout, adminLogout } = require('../controlle
 // Use POST for login and logout
 router.post('/userlogin', userLogin);
 router.post('/adminlogin', adminLogin);
-router.post('/userlogout', userLogout); // Changed to POST
-router.post('/adminlogout', adminLogout); // Changed to POST
+router.get('/userlogout', userLogout); // Changed to POST
+router.get('/adminlogout', adminLogout); // Changed to POST
 
 module.exports = router;

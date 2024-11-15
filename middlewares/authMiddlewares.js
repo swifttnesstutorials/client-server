@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-
+require('dotenv').config(); 
 // Middleware to verify JWT token
 const verifyToken = (req, res, next) => {
   //const token = req.header('Authorization');  

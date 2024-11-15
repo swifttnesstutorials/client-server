@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllCart, getCartById, postCart, updateCart, deleteCart } = require('../controllers/cartControllers.js');
+const { getAllCart, getCartById, postCart, updateCart, deleteCart } = require('../controllers/cartcontrollers.js');
 
 
 router.get('/', getAllCart);
@@ -12,5 +12,7 @@ router.post('/', postCart);
 router.patch('/:cartId', updateCart);  // Fixed this line
 
 router.delete('/:cartId', deleteCart);
+
+
 
 module.exports = router;
