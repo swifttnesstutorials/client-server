@@ -51,6 +51,13 @@ app.post('/api/create-payment-intent', async (req, res) => {
 
   // Ensure amount is converted to paisa (smallest unit of INR)
   const amountInPaisa = amount * 100; // Convert INR to paisa
+  // Check that totalAmount is above the minimum charge amount for INR
+      // As per Stripe's guidelines, the minimum charge amount is 50 INR
+      if (amountInPaise < 5000) { // 50 INR = 5000 paise
+        setError("The amount is too low. Please ensure it's above the minimum allowed (50 INR).");
+        setLoading(false);
+        return;
+      }
 
   try {
     // Create payment intent
