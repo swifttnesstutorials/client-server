@@ -1,5 +1,5 @@
 // controllers/foodControllers.js
-const Food=require('../models/foodModel')
+const Food=require('../models/foodModel.js')
 
 const getAllFood=async(req, res) => {
 
