@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { verifyToken } = require('../middlewares/authMiddlewares.js');
-const { getUserProfile, userSignup, userLogin, updateUser, deleteUser } = require('../controllers/userControllers.js');  // Corrected import path
+const { verifyToken } = require('../middlewares/authMiddlewares');
+const { getUserProfile, userSignup, userLogin, updateUser, deleteUser } = require('../controllers/userControllers');  // Corrected import path
 
 // Routes
 router.post('/signup', userSignup);
