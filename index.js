@@ -16,22 +16,28 @@ const app = express();
 const port = 3000;
 
 // List of allowed origins (both local and deployed frontend)
-const allowedOrigins = ['http://localhost:5173', 'https://client-ten-nu-42.vercel.app'];
+const allowedOrigins = ['https://client-ten-nu-42.vercel.app', 'http://localhost:5173'];
 
 // CORS configuration to allow both origins
 app.use(cors({
-  origin: function(origin, callback) {
-    // Check if the origin is in the allowed list or if there is no origin (e.g., Postman)
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true); // Allow the request
-    } else {
-      callback(new Error('Not allowed by CORS')); // Block the request if the origin is not in the allowed list
-    }
+  origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true); // Allow the request
+      } else {
+          console.error(`Blocked by CORS: ${origin}`);
+          callback(new Error('Request blocked by CORS policy.'));
+      }
   },
-  methods: ['GET', 'POST', 'DELETE'], // Allow specific methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 
+// Handle pre-flight requests
+app.options('*', (req, res) => {
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.sendStatus(200); // Respond with a 200 OK for pre-flight requests
+});
 app.use(express.json());
 app.use(bodyParser.json());
 
@@ -46,46 +52,12 @@ app.use('/logout', authRoutes);
 app.use('/checkRole', roleRoutes);
 app.use('/payments', paymentRoutes);
 
-app.post('/api/create-payment-intent', async (req, res) => {
-  const { amount } = req.body;
 
-  // Ensure amount is converted to paisa (smallest unit of INR)
-  const amountInPaisa = amount * 100; // Convert INR to paisa
-  // Check that totalAmount is above the minimum charge amount for INR
-      // As per Stripe's guidelines, the minimum charge amount is 50 INR
-      if (amountInPaise < 5000) { // 50 INR = 5000 paise
-        setError("The amount is too low. Please ensure it's above the minimum allowed (50 INR).");
-        setLoading(false);
-        return;
-      }
-
-  try {
-    // Create payment intent
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amountInPaisa, // Amount in paisa (smallest unit of INR)
-      currency: 'inr', // Use INR currency code
-      payment_method_types: ['card'],
-    });
-
-    // Send the client secret to the frontend
-    res.send({ clientSecret: paymentIntent.client_secret });
-  } catch (error) {
-    console.error("Error creating payment intent:", error);
-    
-    // Send a more descriptive error message
-    if (error.type === 'StripeInvalidRequestError' && error.code === 'amount_too_small') {
-      res.status(400).json({ message: 'Amount must be at least 50 cents (INR 50) in the smallest unit (paisa).' });
-    } else {
-      res.status(500).json({ message: "Payment failed", error: error.message });
-    }
-  }
-});
 
 async function main() {
   try {
     await mongoose.connect('mongodb+srv://aryanandhaaryanandha5:4Bh1827PvvzBJv2V@cluster0.rwrcn.mongodb.net/', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      
     });
     console.log("Connected to MongoDB successfully");
 
