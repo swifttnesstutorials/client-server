@@ -8,12 +8,13 @@ const adminRoutes = require('./routes/adminRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 
-const stripe = require('stripe')('sk_test_51QHozPIiBslsh4IXfqKOhSUNWO4lCKJajwYr1WAgGB2dhSgCAcuhSN3HSmVFIE9sojYBcvIvICnag9EunZTSkTu400pbcvLqe0'); // Replace with your Stripe Secret Key
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Use environment variable
+
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
+const port =  process.env.PORT || 3000;
 
 // List of allowed origins (both local and deployed frontend)
 const allowedOrigins = ['https://client-ten-nu-42.vercel.app', 'http://localhost:5173'];
@@ -56,7 +57,7 @@ app.use('/payments', paymentRoutes);
 
 async function main() {
   try {
-    await mongoose.connect('mongodb+srv://aryanandhaaryanandha5:4Bh1827PvvzBJv2V@cluster0.rwrcn.mongodb.net/', {
+    await mongoose.connect(process.env.MONGO_URI, {
       
     });
     console.log("Connected to MongoDB successfully");
