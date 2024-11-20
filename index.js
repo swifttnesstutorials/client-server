@@ -14,7 +14,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const port =  process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 // List of allowed origins (both local and deployed frontend)
 const allowedOrigins = ['https://client-ten-nu-42.vercel.app', 'http://localhost:5173'];
@@ -22,12 +22,12 @@ const allowedOrigins = ['https://client-ten-nu-42.vercel.app', 'http://localhost
 // CORS configuration to allow both origins
 app.use(cors({
   origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true); // Allow the request
-      } else {
-          console.error(`Blocked by CORS: ${origin}`);
-          callback(new Error('Request blocked by CORS policy.'));
-      }
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      console.error(`Blocked by CORS: ${origin}`);
+      callback(new Error('Request blocked by CORS policy.'));
+    }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
@@ -39,6 +39,7 @@ app.options('*', (req, res) => {
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.sendStatus(200); // Respond with a 200 OK for pre-flight requests
 });
+
 app.use(express.json());
 app.use(bodyParser.json());
 
@@ -53,20 +54,19 @@ app.use('/logout', authRoutes);
 app.use('/checkRole', roleRoutes);
 app.use('/payments', paymentRoutes);
 
-
-
+// Connect to MongoDB and start the server
 async function main() {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       
     });
-    console.log("Connected to MongoDB successfully");
+    console.log('Connected to MongoDB successfully');
 
     app.listen(port, '0.0.0.0', () => {
       console.log(`Server running on port ${port}`);
     });
   } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
+    console.error('Error connecting to MongoDB:', err);
   }
 }
 
