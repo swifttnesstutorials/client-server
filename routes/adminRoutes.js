@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { verifyToken, isAdmin } = require('../middlewares/authMiddlewares.js');
-const { getAllAdmin, getAdminById, adminSignup, updateAdmin, deleteAdmin } = require('../controllers/adminContollers.js');
+const { getAllAdmin, getAdminById, adminSignup, updateAdmin, deleteAdmin } = require('../controllers/adminControllers.js');
 
 router.get('/',verifyToken, isAdmin, getAllAdmin);
 

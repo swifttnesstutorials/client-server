@@ -7,6 +7,9 @@ const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const couponRoutes = require('./routes/couponRoutes');  // ✅ Import coupon routes
+const orderRoutes = require('./routes/orderRoutes');  // ✅ Import order routes
+
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Use environment variable
 
@@ -53,6 +56,8 @@ app.use('/login', authRoutes);
 app.use('/logout', authRoutes);
 app.use('/checkRole', roleRoutes);
 app.use('/payments', paymentRoutes);
+app.use('/coupons', couponRoutes);  // ✅ New Coupon Route
+app.use('/orders', orderRoutes);  // ✅ New Order Route
 
 // Connect to MongoDB and start the server
 async function main() {
